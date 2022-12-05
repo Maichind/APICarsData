@@ -74,8 +74,8 @@ def getCar(id):
 # Metods: PUT
 # Opcion para actualizar los datos de un auto registrado por su id.
 @cross_origin
-@app.route('/cars/update/<id>', methods=['PUT'])
-def updateCar(id):
+@app.route('/cars/update/<_id>', methods=['PUT'])
+def updateCar(_id):
     id = request.json['id']
     placa = request.json['placa']
     marca = request.json['marca']
@@ -86,21 +86,21 @@ def updateCar(id):
     precio = request.json['precio']
 
     if id and placa and marca and modelo and kilometraje and transmision and tipo and precio :
-        baseDatos.carData.update_one({"_id": ObjectId(id)}, {'$set' : 
+        baseDatos.carData.update_one({"_id": ObjectId(_id)}, {'$set' : 
                                     {'id' : id, 'placa' : placa,
                                     'marca' : marca, 'modelo' : modelo, 'kilometraje' : kilometraje,
                                     'transmision' : transmision, 'tipo' : tipo, 'precio' : precio}})
-        response = jsonify({'message' : 'Car ' + id + ' actualizado correctamente'})
+        response = jsonify({'message' : 'Car ' + _id + ' actualizado correctamente'})
         return response
     return notFound()
 
 # Metods: DELETE
 #Opción para eliminar una mesa por su id.
 @cross_origin
-@app.route('/cars/delete/<id>', methods=['DELETE'])
-def deleteCar(id):
-    baseDatos.carData.delete_one({"_id": ObjectId(id)})
-    return jsonify({'message' : 'Car '+ id +' borrado correctamente'})
+@app.route('/cars/delete/<_id>', methods=['DELETE'])
+def deleteCar(_id):
+    baseDatos.carData.delete_one({"_id": ObjectId(_id)})
+    return jsonify({'message' : 'Car '+ _id +' borrado correctamente'})
 
 
 #----------------ERROR-----------------------
