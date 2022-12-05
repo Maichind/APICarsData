@@ -1,10 +1,12 @@
 from flask import Flask, jsonify, request, Response
+from flask_cors import CORS, cross_origin
 import pymongo
 import certifi
 from bson import json_util
 from bson.objectid import ObjectId
 
 app = Flask(__name__)
+CORS(app)
 
 from models.carsData import CarsData
 
@@ -24,6 +26,7 @@ def home():
 # ------------- Cars Data ----------------------
 # Metods: POST
 # Opcion para agregar a la base de datos.
+@cross_origin
 @app.route('/cars', methods=['POST'])
 def addCar():
     id = request.json['id']
@@ -53,6 +56,7 @@ def addCar():
 
 # Metods: GET
 # Opcion para obtener los datos de todos los autos registrados.
+@cross_origin
 @app.route('/cars', methods=['GET'])
 def getCars():
     cars = baseDatos.carData.find()
@@ -60,6 +64,7 @@ def getCars():
     return Response (response, mimetype='application/json')
 
 # Opcion para obtener los datos de un auto registrado por su id.
+@cross_origin
 @app.route('/cars/<id>', methods=['GET'])
 def getCar(id):
     car = baseDatos.carData.find_one({"_id": ObjectId(id)})
@@ -68,6 +73,7 @@ def getCar(id):
 
 # Metods: PUT
 # Opcion para actualizar los datos de un auto registrado por su id.
+@cross_origin
 @app.route('/cars/update/<id>', methods=['PUT'])
 def updateCar(id):
     id = request.json['id']
@@ -90,6 +96,7 @@ def updateCar(id):
 
 # Metods: DELETE
 #Opción para eliminar una mesa por su id.
+@cross_origin
 @app.route('/cars/delete/<id>', methods=['DELETE'])
 def deleteCar(id):
     baseDatos.carData.delete_one({"_id": ObjectId(id)})
@@ -97,6 +104,7 @@ def deleteCar(id):
 
 
 #----------------ERROR-----------------------
+@cross_origin
 @app.errorhandler(404)
 def notFound(error=None):
     message ={
