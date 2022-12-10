@@ -153,6 +153,105 @@ def getCarAlm(id):
     return Response (response, mimetype='application/json')
 
 
+#----------------VENTA-----------------------
+# Metods: POST
+# Opcion para agregar a la base de datos.
+@cross_origin
+@app.route('/ventas', methods=['POST'])
+def addCarVentas():
+    id = request.json['id']
+    placa = request.json['placa']
+    marca = request.json['marca']
+    modelo = request.json['modelo']
+    kilometraje = request.json['kilometraje']
+    transmision = request.json['transmision']
+    tipo = request.json['tipo']
+    precio = request.json['precio']
+
+    if id and placa and marca and modelo and kilometraje and transmision and tipo and precio:
+        carNew = CarsData(id, placa, marca, modelo, kilometraje, transmision, tipo, precio)
+        baseDatos.venta.insert_one(carNew.toDBCollection())
+        response = jsonify({
+            "id" : id,
+            "placa" : placa,
+            "marca" : marca,
+            "modelo" : modelo,
+            "kilometraje" : kilometraje,
+            "transmision" : transmision,
+            "tipo" : tipo,
+            "precio" : precio
+        })
+        return response
+    return notFound()
+
+# Metods: GET
+# Opcion para obtener los datos de todos los autos registrados.
+@cross_origin
+@app.route('/ventas', methods=['GET'])
+def getCarsVentas():
+    cars = baseDatos.venta.find()
+    response = json_util.dumps(cars)
+    return Response (response, mimetype='application/json')
+
+# Opcion para obtener los datos de un auto registrado por su id.
+@cross_origin
+@app.route('/ventas/<id>', methods=['GET'])
+def getCarVentas(id):
+    car = baseDatos.venta.find_one({"_id": ObjectId(id)})
+    response = json_util.dumps(car)
+    return Response (response, mimetype='application/json')
+
+
+
+#----------------VENDIDOS-----------------------
+# Metods: POST
+# Opcion para agregar a la base de datos.
+@cross_origin
+@app.route('/vendidos', methods=['POST'])
+def addCarVendido():
+    id = request.json['id']
+    placa = request.json['placa']
+    marca = request.json['marca']
+    modelo = request.json['modelo']
+    kilometraje = request.json['kilometraje']
+    transmision = request.json['transmision']
+    tipo = request.json['tipo']
+    precio = request.json['precio']
+
+    if id and placa and marca and modelo and kilometraje and transmision and tipo and precio:
+        carNew = CarsData(id, placa, marca, modelo, kilometraje, transmision, tipo, precio)
+        baseDatos.vendidos.insert_one(carNew.toDBCollection())
+        response = jsonify({
+            "id" : id,
+            "placa" : placa,
+            "marca" : marca,
+            "modelo" : modelo,
+            "kilometraje" : kilometraje,
+            "transmision" : transmision,
+            "tipo" : tipo,
+            "precio" : precio
+        })
+        return response
+    return notFound()
+
+# Metods: GET
+# Opcion para obtener los datos de todos los autos registrados.
+@cross_origin
+@app.route('/vendidos', methods=['GET'])
+def getCarsVendido():
+    cars = baseDatos.vendidos.find()
+    response = json_util.dumps(cars)
+    return Response (response, mimetype='application/json')
+
+# Opcion para obtener los datos de un auto registrado por su id.
+@cross_origin
+@app.route('/vendidos/<id>', methods=['GET'])
+def getCarVendido(id):
+    car = baseDatos.vendidos.find_one({"_id": ObjectId(id)})
+    response = json_util.dumps(car)
+    return Response (response, mimetype='application/json')
+
+
 #----------------ERROR-----------------------
 @cross_origin
 @app.errorhandler(404)
